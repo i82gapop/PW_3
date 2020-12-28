@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+  <welcome-file-list> 
+  	<welcome-file>index.jsp</welcome-file> 
+  
+  </welcome-file-list>
+  
+  <context-param>
+    <param-name>User</param-name>
+    <param-value>i82gapop</param-value>
+  </context-param>
+  <context-param>
+    <param-name>Pwd</param-name>
+    <param-value>i82gapop</param-value>
+  </context-param>
+  <context-param>
+    <param-name>Url</param-name>
+    <param-value>jdbc:mysql://oraclepr.uco.es:3306/i82gapop</param-value>
+  </context-param>
+  <context-param>
+    <param-name>sqlprop</param-name>
+    <param-value>/WEB-INF/sql.properties</param-value>
+  </context-param>
+
+
+
+<servlet>
+	<servlet-name>CreatePost</servlet-name>
+	
+	<servlet-class>servlets.CreatePost</servlet-class>
+	
+</servlet>
+<servlet-mapping>
+
+	<servlet-name>CreatePost</servlet-name>
+	<url-pattern>/CreatePost</url-pattern>
+
+</servlet-mapping>
+
+<servlet>
+	<servlet-name>Login</servlet-name>
+	
+	<jsp-file>/mvc/controller/loginController.jsp</jsp-file>
+	
+
+</servlet>
+<servlet-mapping>
+
+	<servlet-name>Login</servlet-name>
+	<url-pattern>/Login</url-pattern>
+
+</servlet-mapping>
+
+<servlet>
+	<servlet-name>Register</servlet-name>
+	
+	<jsp-file>/mvc/controller/registerController.jsp</jsp-file>
+	
+
+</servlet>
+<servlet-mapping>
+
+	<servlet-name>Register</servlet-name>
+	<url-pattern>/Register</url-pattern>
+
+</servlet-mapping>
+
+<servlet>
+	<servlet-name>Modify</servlet-name>
+	
+	<jsp-file>/mvc/controller/modifyController.jsp</jsp-file>
+	
+
+</servlet>
+<servlet-mapping>
+
+	<servlet-name>Modify</servlet-name>
+	<url-pattern>/Modify</url-pattern>
+
+</servlet-mapping>
+
+<servlet>
+	<servlet-name>Logout</servlet-name>
+	
+	<jsp-file>/mvc/controller/logoutController.jsp</jsp-file>
+	
+
+</servlet>
+<servlet-mapping>
+
+	<servlet-name>Logout</servlet-name>
+	<url-pattern>/Logout</url-pattern>
+
+</servlet-mapping>
+
+
+</web-app>
+
+
+
+
+
