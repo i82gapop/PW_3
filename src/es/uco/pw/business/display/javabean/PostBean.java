@@ -1,5 +1,10 @@
 package es.uco.pw.business.display.javabean;
 
+import java.util.ArrayList;
+import es.uco.pw.business.contact.Contact;
+import es.uco.pw.business.post.*;
+
+
 
     /**
      * The DTO Post of the database
@@ -288,6 +293,8 @@ package es.uco.pw.business.display.javabean;
     public void setDate_end(java.sql.Timestamp date_end) {
         this.date_end = date_end;
     }
+    
+   }
 
     /**
        * Auxiliar functions to see the info of a post

@@ -27,7 +27,7 @@
 <servlet>
 	<servlet-name>CreatePost</servlet-name>
 	
-	<servlet-class>servlets.CreatePost</servlet-class>
+	<servlet-class>es.uco.pw.servlets.CreatePost</servlet-class>
 	
 </servlet>
 <servlet-mapping>
@@ -36,6 +36,73 @@
 	<url-pattern>/CreatePost</url-pattern>
 
 </servlet-mapping>
+
+<servlet>
+	<servlet-name>PostPost</servlet-name>
+	
+	<servlet-class>es.uco.pw.servlets.PostaPost</servlet-class>
+	
+</servlet>
+<servlet-mapping>
+
+	<servlet-name>PostPost</servlet-name>
+	<url-pattern>/PostPost</url-pattern>
+
+</servlet-mapping>
+
+<servlet>
+	<servlet-name>ArchivePost</servlet-name>
+	
+	<servlet-class>es.uco.pw.servlets.ArchivePost</servlet-class>
+	
+</servlet>
+<servlet-mapping>
+
+	<servlet-name>ArchivePost</servlet-name>
+	<url-pattern>/ArchivePost</url-pattern>
+
+</servlet-mapping>
+
+<servlet>
+	<servlet-name>EditPost</servlet-name>
+	
+	<servlet-class>es.uco.pw.servlets.EditPost</servlet-class>
+	
+</servlet>
+<servlet-mapping>
+
+	<servlet-name>EditPost</servlet-name>
+	<url-pattern>/EditPost</url-pattern>
+
+</servlet-mapping>
+
+<servlet>
+	<servlet-name>EditPostBis</servlet-name>
+	
+	<servlet-class>es.uco.pw.servlets.EditPostBis</servlet-class>
+	
+</servlet>
+<servlet-mapping>
+
+	<servlet-name>EditPostBis</servlet-name>
+	<url-pattern>/EditPostBis</url-pattern>
+
+</servlet-mapping>
+
+<servlet>
+	<servlet-name>RecoverPost</servlet-name>
+	
+	<servlet-class>es.uco.pw.servlets.RecoverPost</servlet-class>
+	
+</servlet>
+<servlet-mapping>
+
+	<servlet-name>RecoverPost</servlet-name>
+	<url-pattern>/RecoverPost</url-pattern>
+
+</servlet-mapping>
+
+
 
 <servlet>
 	<servlet-name>Login</servlet-name>

@@ -14,7 +14,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 		
-	<title>Register</title>
+	<title>Archive a Post</title>
 	<link rel="stylesheet" href="mvc/css/main.css">
 	<link rel="stylesheet" href="mvc/css/login-register.css">
 	</head>
@@ -35,11 +35,11 @@
 		DAOInterest daointerest = new DAOInterest(request.getServletContext().getInitParameter("Url"), request.getServletContext().getInitParameter("User"), request.getServletContext().getInitParameter("Pwd"), prop);
 		ArrayList <String> interests_ = daointerest.ListInterests();
     
-String nextPage = "Register";
+String nextPage = "ArchivePost";
 String messageNextPage = request.getParameter("message");
 if (messageNextPage == null) messageNextPage = "";
 
-if (ContactBean != null && !ContactBean.getEmail().equals("")) {
+if (ContactBean == null || ContactBean.getEmail().equals("")) {
 	//No debería estar aquí -> flujo salta a index.jsp
 	nextPage = "index.jsp";
 } else {
@@ -49,14 +49,15 @@ if (ContactBean != null && !ContactBean.getEmail().equals("")) {
 
     <div class="main-content">
 
-        <form action="Register" class="form-register" method="post" >
+        <form action="ArchivePost" class="form-register" method="post" >
 
             <div class="form-register-with-email">
 
                 <div class="form-white-background">
 
                     <div class="form-title-row">
-                        <h1>Register</h1>
+                        <h1>Archive a post</h1>
+
                     </div>
 				   
 					<p style="color:green">				   		
@@ -66,59 +67,22 @@ if (ContactBean != null && !ContactBean.getEmail().equals("")) {
 						out.println(request.getAttribute("successMsg")); //register success message
 					}
 					%>
-					</p>
-				   
+                    </p>
 				
-				   
-                    <div class="form-row">
+					<div id="id" class="form-row" >
                         <label>
-                            <span>Firstname</span>
-                            <input type="text" name="name" id="fname" placeholder="enter firstname">
-                        </label>
-                    </div>
-					<div class="form-row">
-                        <label>
-                            <span>Surname</span>
-                            <input type="text" name="surname" id="lname" placeholder="enter lastname">
+                            <span>ID</span>
+                            <input type="text" name="_id" id="_id" placeholder="enter the ID of the post to archive">
                         </label>
                     </div>
 
-                    <div class="form-row">
-                        <label>
-                            <span>Birthday</span>
-                            <input type="text" name="birthday" id="birthday" placeholder="(format: dd-MM-yyyy)">
-                        </label>
-                    </div>
                     
-                    <div class="form-row">
-                        <label>
-                            <span>Email</span>
-                            <input type="text" name="email" id="email" placeholder="enter email">
-                        </label>
-                    </div>
-
-                    <div class="form-row">
-                        <label>
-                            <span>Password</span>
-                            <input type="password" name="password" id="password" placeholder="enter password">
-                        </label>
-                    </div>
-                    <div class="form-row">
-                        <label>
-                            <span>Interests</span>
-                            <input type="text" name="interests" id="interests" placeholder="enter interests">
-                        </label>
-                    </div>
-                    
-  					<h5>Possible interests: <%=interests_%></h5>
-                    <%= messageNextPage %><br/><br/>
-
+					<span style = "color: red;">${error} </span>
 					<input type="submit" name="btn_register" value="Submit">
 					<input type="button" onclick="window.location.href='index.jsp';" value="Back" />
 					
                 </div>
 				
-                <a href="Login" class="form-log-in-with-existing">Already have an account? <b> Login here </b></a>
 
             </div>
 

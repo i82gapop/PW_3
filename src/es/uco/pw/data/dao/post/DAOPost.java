@@ -33,7 +33,7 @@ public class DAOPost{
 	private String user;
 	private String pwd;
 	private Properties sqlprop;
-	private DAOContact daoContact = new DAOContact();
+	private DAOContact daoContact;
 	
 	/**
 	 * Empty (default) constructor
@@ -55,6 +55,7 @@ public class DAOPost{
 		this.user = user;
 		this.pwd = pwd;
 		this.sqlprop = sqlprop;
+		this.daoContact = new DAOContact(url, user, pwd, sqlprop);
 	}
 	
 	/**
@@ -312,6 +313,15 @@ public class DAOPost{
     
                             PreparedStatement ps=con.prepareStatement(statement);
                             ps.setString(1,Status.WAITING.name());
+                            ps.setInt(2,post.getIdentifier());
+    
+                            status=ps.executeUpdate();
+                        }
+
+                        else if((post.getDate_start().before(new Timestamp(System.currentTimeMillis()))) && (post.getDate_end().before(new Timestamp(System.currentTimeMillis())))){
+
+                            PreparedStatement ps=con.prepareStatement(statement);
+                            ps.setString(1,Status.ARCHIVED.name());
                             ps.setInt(2,post.getIdentifier());
     
                             status=ps.executeUpdate();
@@ -1114,6 +1124,106 @@ public class DAOPost{
         } 
 
         return results;
+    }
+
+   
+    /**
+     * Function that list all posts sorting them by publication date desc
+     *
+     * @return results The ArrayList with the posts
+     *
+     **/
+
+    public ArrayList <Post> ListPosts(){
+        
+        Statement stmt = null;
+        ArrayList <Post> results = new ArrayList<Post>();
+        Post resul = null;
+        Contact capsule = new Contact();
+
+        try {
+            
+            Connection con=getConnection();
+
+            String statement = sqlprop.getProperty("ListAllPosts");
+            
+            stmt = con.createStatement();
+
+            ResultSet rs = stmt.executeQuery(statement);
+            
+            while (rs.next()) {
+
+                boolean existence = false;
+
+                capsule.setEmail(rs.getString("Owner"));
+
+                resul = new Post(rs.getInt("ID"), rs.getString("Title"), rs.getString("Body"), daoContact.QueryByEmail(capsule)); 
+
+                resul.setType(Type.valueOf(rs.getString("Type")));
+                resul.setStatus(Status.valueOf(rs.getString("Status")));
+                resul.setPublication(rs.getTimestamp("Publication"));
+                resul.setDate_start(rs.getTimestamp("Start"));
+                resul.setDate_end(rs.getTimestamp("End"));
+
+                ArrayList <String> array = new ArrayList <String>();
+
+                if(resul.getType().equals(Type.INDIVIDUALIZED)){
+
+                    array = SelectRecipients(resul);
+                    resul.setRecipients(array);
+                }
+
+                else if(resul.getType().equals(Type.THEMATIC)){
+
+                    array = SelectInterests(resul);
+                    resul.setInterests(array);
+                }
+
+
+                if(!existence){
+
+                    results.add(resul);
+                }
+            }
+            
+
+            if (stmt != null) {
+                
+                stmt.close();
+            }
+                
+        } catch (Exception e) {
+            System.out.println(e);
+        } 
+
+        return results;
+    }
+    
+    
+    public int Recover(Post post){
+    	
+    	int status=0;
+        
+		try{
+            
+			Connection con=getConnection();        
+
+            if(post.getStatus().equals(Status.ARCHIVED)){
+
+                String statement = sqlprop.getProperty("UpdateStatus");
+
+                
+                PreparedStatement ps=con.prepareStatement(statement);
+                ps.setString(1,Status.EDITED.name());
+                ps.setInt(2,post.getIdentifier());
+
+                status=ps.executeUpdate();
+                
+            }  
+
+		}catch(Exception e){System.out.println(e);}
+		
+		return status;
     }
 }
 

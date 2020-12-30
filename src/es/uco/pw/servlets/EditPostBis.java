@@ -1,6 +1,5 @@
 package es.uco.pw.servlets;
 
-
 import es.uco.pw.business.display.javabean.ContactBean;
 import java.io.IOException;
 import javax.servlet.*;
@@ -16,63 +15,74 @@ import es.uco.pw.business.post.Post;
 import es.uco.pw.business.post.Type;
 import es.uco.pw.data.dao.post.DAOPost;
 
-
 /**
- * Servlet implementation class Servlet
+ * Servlet implementation class EditPostBis
  */
-
-public class CreatePost extends HttpServlet {
+public class EditPostBis extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+       
     /**
-     * Default constructor. 
+     * @see HttpServlet#HttpServlet()
      */
-    public CreatePost() {
-        
+    public EditPostBis() {
+        super();
+        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-	String sql_prop = request.getServletContext().getInitParameter("sqlprop");
-	String nextPage = "index.jsp";
-	ContactBean contactBean = (ContactBean)request.getSession().getAttribute("ContactBean");
-	ServletContext application = getServletContext();
-	
-if(contactBean == null || contactBean.getEmail().equals("")){
+		// TODO Auto-generated method stub
+		String sql_prop = request.getServletContext().getInitParameter("sqlprop");
+		String nextPage = "index.jsp";
+		ContactBean contactBean = (ContactBean)request.getSession().getAttribute("ContactBean");
+		ServletContext application = getServletContext();
 		
-		nextPage = "index.jsp";
-	}
-
-
-//Caso 2: its logged in
-else{
-	SimpleDateFormat format = new SimpleDateFormat("HH:mm/dd-MM-yyyy");
-	nextPage = "/mvc/view/createPostView.jsp";
-
-        java.io.InputStream myIO = application.getResourceAsStream(sql_prop);
-		java.util.Properties prop = new java.util.Properties();
-		prop.load(myIO);
+		if(contactBean == null || contactBean.getEmail().equals("")){
+			
+			nextPage = "index.jsp";
+		}
+		else{
+			SimpleDateFormat format = new SimpleDateFormat("HH:mm/dd-MM-yyyy");
+			
+			nextPage = "/mvc/view/editPostBisView.jsp";
+	        java.io.InputStream myIO = application.getResourceAsStream(sql_prop);
+			java.util.Properties prop = new java.util.Properties();
+			prop.load(myIO);
+			
+			DAOInterest daointerest = new DAOInterest(request.getServletContext().getInitParameter("Url"), request.getServletContext().getInitParameter("User"), request.getServletContext().getInitParameter("Pwd"), prop);
+			DAOContact daocontact = new DAOContact(request.getServletContext().getInitParameter("Url"), request.getServletContext().getInitParameter("User"), request.getServletContext().getInitParameter("Pwd"), prop);
+			ArrayList <String> interests_list = daointerest.ListInterests();
+			DAOPost daopost = new DAOPost(request.getServletContext().getInitParameter("Url"), request.getServletContext().getInitParameter("User"), request.getServletContext().getInitParameter("Pwd"), prop);
+			Post aux_post = new Post();
+			Contact aux_contact = new Contact();
+			if(request.getAttribute("id")!=null) {
+				
+				int aux_id = (int) request.getAttribute("id");
+				System.out.println(aux_id);
+			
 		
-		DAOInterest daointerest = new DAOInterest(request.getServletContext().getInitParameter("Url"), request.getServletContext().getInitParameter("User"), request.getServletContext().getInitParameter("Pwd"), prop);
-		DAOContact daocontact = new DAOContact(request.getServletContext().getInitParameter("Url"), request.getServletContext().getInitParameter("User"), request.getServletContext().getInitParameter("Pwd"), prop);
-		ArrayList <String> interests_list = daointerest.ListInterests();
-		DAOPost daopost = new DAOPost(request.getServletContext().getInitParameter("Url"), request.getServletContext().getInitParameter("User"), request.getServletContext().getInitParameter("Pwd"), prop);
-		Post aux_post = new Post();
-		Contact aux_contact = new Contact();
-		
-		System.out.println("HOLA");
-		
+		aux_post.setIdentifier(aux_id);
+        
+        aux_post = daopost.QueryByID(aux_post);
+        request.setAttribute("id_post", aux_id);
+        request.setAttribute("title_post", aux_post.getTitle());
+        request.setAttribute("body_post", aux_post.getBody());
+        request.setAttribute("type_post", aux_post.getType().toString());
+			}
+        
+
+			else {
+        String id_post = request.getParameter("id_post_");
 		String titlePost = request.getParameter("_title");
 		String bodyPost = request.getParameter("_body");
 		String aux_interests = request.getParameter("_interests");
 		String aux_recipients = request.getParameter("_recipients");
 		String date_start_post = request.getParameter("_date_start");
 		String date_end_post = request.getParameter("_date_end");
-		
-		//its a thematic post
+		int id_post_ = Integer.parseInt(id_post);
+        
 		if((aux_interests != null) && (aux_interests != "")) {
 			StringTokenizer interests = new StringTokenizer(aux_interests.replace(" ", ""), ",");
 	        ArrayList <String> token_interests = new ArrayList <String>();
@@ -89,10 +99,11 @@ else{
 	                }
 	            }
 	    		aux_contact.setEmail(contactBean.getEmail());
-	    		aux_post = new Post(0, titlePost, bodyPost, aux_contact);
+	    		aux_post = new Post(id_post_, titlePost, bodyPost, aux_contact);
 	    		aux_post.setInterests(aux_contact.getInterests());
 	    		aux_post.setType(Type.THEMATIC);
-	    		daopost.Save(aux_post);
+	    		daopost.Update(aux_post);
+	    		nextPage = "index.jsp";
 	    		
 	    		
 	        
@@ -121,11 +132,12 @@ else{
             }
 
     		aux_contact.setEmail(contactBean.getEmail());
-    		aux_post = new Post(0, titlePost, bodyPost, aux_contact);
+    		aux_post = new Post(id_post_, titlePost, bodyPost, aux_contact);
             aux_post.setRecipients(buff_recipients);
             aux_post.setType(Type.INDIVIDUALIZED);
 
-            daopost.Save(aux_post);
+            daopost.Update(aux_post);
+            nextPage = "index.jsp";
 
 		
 			
@@ -144,12 +156,13 @@ else{
 			date_end = new java.sql.Timestamp(date.getTime());
 
     		aux_contact.setEmail(contactBean.getEmail());
-    		aux_post = new Post(0, titlePost, bodyPost, aux_contact);
+    		aux_post = new Post(id_post_, titlePost, bodyPost, aux_contact);
     		aux_post.setDate_start(date_start);
     		aux_post.setDate_end(date_end);
     		aux_post.setType(Type.FLASH);
     		
-    		daopost.Save(aux_post);
+    		daopost.Update(aux_post);
+    		nextPage = "index.jsp";
 			} catch (ParseException e) {
 				
 				e.printStackTrace();
@@ -160,30 +173,27 @@ else{
 		
 		else if((titlePost != null) && (bodyPost != null)){
     		aux_contact.setEmail(contactBean.getEmail());
-    		aux_post = new Post(0, titlePost, bodyPost, aux_contact);
+    		aux_post = new Post(id_post_, titlePost, bodyPost, aux_contact);
     		aux_post.setType(Type.GENERAL);
-    		daopost.Save(aux_post);
+    		daopost.Update(aux_post);
     		nextPage = "index.jsp";
 			
 			
+			}
+		
+			}
 		}
 		
-
-				
-			}
-				RequestDispatcher disp = request.getRequestDispatcher(nextPage);
-				disp.forward(request, response);
-		}			
-
-	
-
-
+		RequestDispatcher disp = request.getRequestDispatcher(nextPage);
+		disp.forward(request, response);
+		
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

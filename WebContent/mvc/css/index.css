@@ -1,0 +1,69 @@
+.header {
+
+    overflow: hidden;
+    background-color: #333;
+    padding: 14px 16px;
+    
+}
+
+.buttons {
+
+    background-color: #333;
+}
+
+.buttons a{
+
+    float: right;
+    display: block;
+    background-color: #333;
+    color: #f2f2f2;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+
+.buttons a:hover{
+
+    background-color: #ddd;
+    color: black;
+}
+
+.column {
+    overflow: auto;
+    float: left;
+    width: 50%;
+    padding: 15px;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+@media screen and (max-width:600px) {
+    
+    .column {
+      width: 100%;
+    }
+}
+
+.footer{
+
+    background-color: #333;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 7%;
+    text-align: center;
+    color: white;
+    font-size: 30pt;
+    padding-top: 0.50%;
+}
+
+@media screen and (max-width:710px) {
+    
+    .footer {
+      height: 15%;
+    }
+}
