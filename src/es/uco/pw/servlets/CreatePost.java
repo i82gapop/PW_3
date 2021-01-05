@@ -63,7 +63,6 @@ else{
 		Post aux_post = new Post();
 		Contact aux_contact = new Contact();
 		
-		System.out.println("HOLA");
 		
 		String titlePost = request.getParameter("_title");
 		String bodyPost = request.getParameter("_body");
@@ -94,6 +93,9 @@ else{
 	    		aux_post.setType(Type.THEMATIC);
 	    		daopost.Save(aux_post);
 	    		
+	        	request.setAttribute("success", "Post created succesfully");
+	        	RequestDispatcher disp = request.getRequestDispatcher(nextPage);
+	        	disp.include(request, response); 
 	    		
 	        
 			
@@ -126,6 +128,10 @@ else{
             aux_post.setType(Type.INDIVIDUALIZED);
 
             daopost.Save(aux_post);
+            
+        	request.setAttribute("success", "Post created succesfully");
+        	RequestDispatcher disp = request.getRequestDispatcher(nextPage);
+        	disp.include(request, response); 
 
 		
 			
@@ -150,6 +156,9 @@ else{
     		aux_post.setType(Type.FLASH);
     		
     		daopost.Save(aux_post);
+        	request.setAttribute("success", "Post created succesfully");
+        	RequestDispatcher disp = request.getRequestDispatcher(nextPage);
+        	disp.include(request, response); 
 			} catch (ParseException e) {
 				
 				e.printStackTrace();
@@ -163,7 +172,11 @@ else{
     		aux_post = new Post(0, titlePost, bodyPost, aux_contact);
     		aux_post.setType(Type.GENERAL);
     		daopost.Save(aux_post);
-    		nextPage = "index.jsp";
+    		
+        	request.setAttribute("success", "Post created succesfully");
+        	RequestDispatcher disp = request.getRequestDispatcher(nextPage);
+        	disp.include(request, response); 
+
 			
 			
 		}

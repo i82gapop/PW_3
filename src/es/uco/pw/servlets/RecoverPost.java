@@ -14,6 +14,7 @@ import es.uco.pw.data.dao.interest.DAOInterest;
 import es.uco.pw.business.contact.Contact;
 import es.uco.pw.data.dao.contact.DAOContact;
 import es.uco.pw.business.post.Post;
+import es.uco.pw.business.post.Status;
 import es.uco.pw.business.post.Type;
 import es.uco.pw.data.dao.post.DAOPost;
 /**
@@ -59,12 +60,27 @@ public class RecoverPost extends HttpServlet {
 			
 			if(action == null) {
 			} 
+			
 			else {
-				recoverPost(request, response);
+				int aux_id;
+				String id = request.getParameter("id");
+				aux_id = Integer.parseInt(id);
+				Post aux_post = new Post();
+				aux_post.setIdentifier(aux_id);
+				aux_post.setStatus(Status.ARCHIVED);
+			switch(action) {
+			case "DELETE":
 				
-			}
+				daopost.Delete(aux_post);
+				break;
+				
+			case "RECOVER":
+				daopost.Recover(aux_post);
+				break;
+				}
 			
 	        
+			}
 		}
 		RequestDispatcher disp = request.getRequestDispatcher(nextPage);
 		disp.forward(request, response);
@@ -72,25 +88,8 @@ public class RecoverPost extends HttpServlet {
 	}
 	
 	
-	private void recoverPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		String sql_prop = request.getServletContext().getInitParameter("sqlprop");
-		ServletContext application = getServletContext();
-        java.io.InputStream myIO = application.getResourceAsStream(sql_prop);
-		java.util.Properties prop = new java.util.Properties();
-		prop.load(myIO);
-		
-		DAOPost daopost = new DAOPost(request.getServletContext().getInitParameter("Url"), request.getServletContext().getInitParameter("User"), request.getServletContext().getInitParameter("Pwd"), prop);
+	
 
-		
-		String id = request.getParameter("id");
-		int aux_id = Integer.parseInt(id);
-		Post aux_post = new Post();
-		aux_post.setIdentifier(aux_id);
-		daopost.Recover(aux_post);
-		
-
-		}
 		
 	
 

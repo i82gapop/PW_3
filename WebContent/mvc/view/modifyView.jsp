@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
-    <%@ page import ="es.uco.pw.data.dao.interest.DAOInterest" %>
+    
+<%@ page import ="es.uco.pw.data.dao.interest.DAOInterest" %>
 <%@page import = "java.util.ArrayList"%>
 <jsp:useBean  id="ContactBean" scope="session" class="es.uco.pw.business.display.javabean.ContactBean"></jsp:useBean>
 
@@ -25,14 +25,15 @@
 	2) customerBean no está logado:
 		a) Hay parámetros en el request  -> procede del controlador /con mensaje 
 		b) No hay parámetros en el request -> procede del controlador /sin mensaje
-    */
-    String sql_prop = request.getServletContext().getInitParameter("sqlprop");
+	*/
+	
+	String sql_prop = request.getServletContext().getInitParameter("sqlprop");
     java.io.InputStream myIO = application.getResourceAsStream(sql_prop);
-    java.util.Properties prop = new java.util.Properties();
-    prop.load(myIO);
+	java.util.Properties prop = new java.util.Properties();
+	prop.load(myIO);
 
-    DAOInterest daointerest = new DAOInterest(request.getServletContext().getInitParameter("Url"), request.getServletContext().getInitParameter("User"), request.getServletContext().getInitParameter("Pwd"), prop);
-    ArrayList <String> interests_ = daointerest.ListInterests();
+	DAOInterest daointerest = new DAOInterest(request.getServletContext().getInitParameter("Url"), request.getServletContext().getInitParameter("User"), request.getServletContext().getInitParameter("Pwd"), prop);
+	ArrayList <String> interests_ = daointerest.ListInterests();
 	
 String nextPage = "Modify";
 String messageNextPage = request.getParameter("message");
@@ -90,7 +91,7 @@ if (ContactBean == null || ContactBean.getEmail().equals("")) {
                     <div class="form-row">
                         <label>
                             <span>Interests</span>
-                            <input type="text" name="interests" id="interests" placeholder="enter interests">
+                            <input type="text" name="interests" id="interests" placeholder="enter interests split by commas">
                         </label>
                     </div>
                     <h5>Possible interests: <%=interests_%></h5>

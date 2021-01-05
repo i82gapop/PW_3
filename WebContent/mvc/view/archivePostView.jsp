@@ -78,6 +78,8 @@ if (ContactBean == null || ContactBean.getEmail().equals("")) {
 
                     
 					<span style = "color: red;">${error} </span>
+					<span style = "color: green;">${success} </span>	<br/>
+					
 					<input type="submit" name="btn_register" value="Submit">
 					<input type="button" onclick="window.location.href='index.jsp';" value="Back" />
 					

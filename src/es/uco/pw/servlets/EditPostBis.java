@@ -60,7 +60,7 @@ public class EditPostBis extends HttpServlet {
 			if(request.getAttribute("id")!=null) {
 				
 				int aux_id = (int) request.getAttribute("id");
-				System.out.println(aux_id);
+
 			
 		
 		aux_post.setIdentifier(aux_id);
@@ -103,6 +103,7 @@ public class EditPostBis extends HttpServlet {
 	    		aux_post.setInterests(aux_contact.getInterests());
 	    		aux_post.setType(Type.THEMATIC);
 	    		daopost.Update(aux_post);
+            	request.setAttribute("success", "Post posted succesfully");
 	    		nextPage = "index.jsp";
 	    		
 	    		
@@ -137,6 +138,7 @@ public class EditPostBis extends HttpServlet {
             aux_post.setType(Type.INDIVIDUALIZED);
 
             daopost.Update(aux_post);
+        	request.setAttribute("success", "Post posted succesfully");
             nextPage = "index.jsp";
 
 		
@@ -162,6 +164,7 @@ public class EditPostBis extends HttpServlet {
     		aux_post.setType(Type.FLASH);
     		
     		daopost.Update(aux_post);
+        	request.setAttribute("success", "Post posted succesfully");
     		nextPage = "index.jsp";
 			} catch (ParseException e) {
 				
@@ -176,6 +179,7 @@ public class EditPostBis extends HttpServlet {
     		aux_post = new Post(id_post_, titlePost, bodyPost, aux_contact);
     		aux_post.setType(Type.GENERAL);
     		daopost.Update(aux_post);
+        	request.setAttribute("success", "Post posted succesfully");
     		nextPage = "index.jsp";
 			
 			

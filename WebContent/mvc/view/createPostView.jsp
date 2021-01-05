@@ -17,6 +17,7 @@
 	<title>Create a Post</title>
 	<link rel="stylesheet" href="mvc/css/main.css">
 	<link rel="stylesheet" href="mvc/css/login-register.css">
+	 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
 	</head>
 	
 <%
@@ -49,7 +50,7 @@ if (ContactBean == null || ContactBean.getEmail().equals("")) {
 
     <div class="main-content">
 
-        <form action="CreatePost" class="form-register" method="post" >
+        <form action="CreatePost" class="form-register" method="post" id="form" >
 
             <div class="form-register-with-email">
 
@@ -130,9 +131,14 @@ if (ContactBean == null || ContactBean.getEmail().equals("")) {
                     </div>
 
 
-
+					<span style = "color: red;">${error} </span>
+					<span style = "color: green;">${success} </span>	<br/>
+					
 					<input type="submit" name="btn_register" value="Submit">
 					<input type="button" onclick="window.location.href='index.jsp';" value="Back" />
+					<p class="warnings" id="warnings"></p>
+					
+					         <script src="javascript/createPostVali.js"></script>
 					
                 </div>
 				
@@ -140,6 +146,8 @@ if (ContactBean == null || ContactBean.getEmail().equals("")) {
             </div>
 
         </form>
+        
+
 
     </div>
 

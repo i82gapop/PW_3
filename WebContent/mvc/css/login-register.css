@@ -10,6 +10,15 @@ html{
     font: bold 14px sans-serif;
     text-align: center;
 }
+.warnings{
+
+	width: 200px;
+	text-align: center;
+	margin:auto;
+	color:#B06AB3;
+	padding-top: 20px;
+	
+}
 
 .form-register-with-email{
     position: relative;

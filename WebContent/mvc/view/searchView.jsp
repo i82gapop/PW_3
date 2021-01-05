@@ -38,9 +38,114 @@ DAOPost daopost = new DAOPost(request.getServletContext().getInitParameter("Url"
 
 
 ArrayList<Post> res = daopost.ListPosts();
+ArrayList<Post> results = new ArrayList <Post>();
+Post aux_post = new Post();
+Contact aux_contact = new Contact();
+
+String type = (String)request.getAttribute("typeselection");
+String searchst = (String)request.getAttribute("searchstr");
 
 
-String nextPage = "RecoverPost";
+
+switch(type){
+
+
+
+	case "Interests":
+		
+		StringTokenizer interests = new StringTokenizer(searchst.replace(" ", ""), ",");
+        ArrayList <String> token_interests = new ArrayList <String>();
+
+        while(interests.hasMoreTokens()){
+
+            token_interests.add(interests.nextToken().toUpperCase());
+        }
+        
+		for(int i = 0; i < token_interests.size(); i++){
+
+
+			 aux_contact.addInterest(token_interests.get(i));
+            }
+			aux_post.setInterests(aux_contact.getInterests());
+        	
+ 
+			results = daopost.QueryByInterests(aux_post);
+		
+		
+		
+		break;
+	
+	case "Author":
+		
+		aux_contact.setEmail(searchst);
+		aux_post.setOwner(aux_contact);
+		
+		results = daopost.QueryByOwner(aux_post);
+		
+		
+		break;
+		
+	case "Date":
+		
+		try {//its a flash
+			java.sql.Timestamp date_pub;
+			java.util.Date date = new java.util.Date();
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			
+			date = format.parse(searchst);
+			date_pub = new java.sql.Timestamp(date.getTime());
+			
+
+    		aux_post.setPublication(date_pub);
+    		
+    		results = daopost.QueryByDate(aux_post);
+    		
+
+			} catch (ParseException e) {
+				
+				e.printStackTrace();
+			}
+		
+		
+		
+		break;
+		
+	case "Recipients":
+		DAOContact daocontact = new DAOContact(request.getServletContext().getInitParameter("Url"), request.getServletContext().getInitParameter("User"), request.getServletContext().getInitParameter("Pwd"), prop);
+		
+		StringTokenizer recipients = new StringTokenizer(searchst.replace(" ", ""), ",");
+        ArrayList <String> token_recipients = new ArrayList <String>();
+        ArrayList <String> buff_recipients = new ArrayList<String>();
+
+        while(recipients.hasMoreTokens()){
+
+            token_recipients.add(recipients.nextToken());
+        }
+
+        for(int i = 0; i < token_recipients.size(); i++){
+
+            aux_contact.setEmail(token_recipients.get(i));
+
+            if(daocontact.QueryByEmail(aux_contact)!=null){
+
+                buff_recipients.add(token_recipients.get(i));
+            }
+        }
+
+
+        aux_post.setRecipients(buff_recipients);
+
+		results = daopost.QueryByRecipient(aux_post);
+		
+		break;
+	
+}
+
+
+
+
+
+String nextPage = "Search";
 String messageNextPage = request.getParameter("message");
 if (messageNextPage == null) messageNextPage = "";   
         //redirect user to login page if not logged in
@@ -53,38 +158,29 @@ if (ContactBean == null || ContactBean.getEmail().equals("")) {
 		<div class="float-right">
 			<a href="index.jsp">Go to menu</a>
 		</div>
-		<h1>Archived Posts List</h1>
+		<h1>Results of the search</h1>
 		<hr/>
 		
 		
-		<p>
-			<button class = "btn btn-primary" onclick="window.location.href = 'ArchivePost'">Archive a Post</button>
-		</p>
 	
 		<table class = "table table-striped table-bordered" id="datatable">
 			<thead>
 				<tr class = "thead-dark">
 					<th>ID POST</th>
 					<th>Title</th>
-					<th>Actions</th>
+					<th>Body</th>
 				</tr>
 			</thead>
 			<tbody>
 			
-			<%	for(Post post : res){
-					if((post.getStatus().equals(Status.ARCHIVED)) && (ContactBean.getEmail().equals(post.getOwner().getEmail()))){%>
+			<%	for(Post post : results){%>
+			
 					<tr>
 						<td><%=post.getIdentifier()%></td>
 						<td><%=post.getTitle()%></td>
-						<td> 
-							
-							<a href = "RecoverPost?action=RECOVER&id=<%=post.getIdentifier()%>">Recover</a>
-							| 
-							<a href = "RecoverPost?action=DELETE&id=<%=post.getIdentifier()%>">Delete</a>  
-						</td>
+						<td><%=post.getBody()%></td>
 					</tr>
-						<%}
-					}%>
+						<%}%>
 			</tbody>
 		</table>
 	</div>

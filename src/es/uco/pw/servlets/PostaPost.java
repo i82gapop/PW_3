@@ -57,9 +57,9 @@ public class PostaPost extends HttpServlet {
                 aux_post.setIdentifier(idPost);
                 DAOPost daopost = new DAOPost(request.getServletContext().getInitParameter("Url"), request.getServletContext().getInitParameter("User"), request.getServletContext().getInitParameter("Pwd"), prop);
 
-                System.out.println("Hola1");
+  
                 if(daopost.QueryByID(aux_post) != null) {
-                	System.out.println("Hola1");
+ 
 
                     if(daopost.QueryByID(aux_post).getOwner().getEmail().equals(contactBean.getEmail())){
 
@@ -67,6 +67,10 @@ public class PostaPost extends HttpServlet {
                         aux_post.setStatus(Status.POSTED);
 
                         daopost.UpdateStatus(aux_post);
+                    	request.setAttribute("success", "Post posted succesfully");
+                    	RequestDispatcher disp = request.getRequestDispatcher(nextPage);
+                    	disp.include(request, response); 
+
                     }
 
                     else{

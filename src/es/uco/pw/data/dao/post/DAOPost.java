@@ -1210,7 +1210,7 @@ public class DAOPost{
 
             if(post.getStatus().equals(Status.ARCHIVED)){
 
-                String statement = sqlprop.getProperty("UpdateStatus");
+                String statement = sqlprop.getProperty("RecoverPost");
 
                 
                 PreparedStatement ps=con.prepareStatement(statement);
@@ -1224,6 +1224,100 @@ public class DAOPost{
 		}catch(Exception e){System.out.println(e);}
 		
 		return status;
+    }
+
+
+    public int Delete(Post post){
+    	
+    	int status=0;
+        
+		try{
+            
+			Connection con=getConnection();        
+
+            if(post.getStatus().equals(Status.ARCHIVED)){
+                
+                String statement = sqlprop.getProperty("Delete");
+                
+                PreparedStatement ps=con.prepareStatement(statement);
+                ps.setInt(1,post.getIdentifier());
+
+                DeleteInterests(post);
+                DeleteRecipients(post);
+               
+                status=ps.executeUpdate();
+            }  
+
+		}catch(Exception e){System.out.println(e);}
+		
+		return status;
+    	
+    }
+
+    public ArrayList <String> DistinctsAuthors(){
+    	
+    	Statement stmt = null;
+        ArrayList <String> results = new ArrayList<String>();
+        
+		try{
+            
+			Connection con=getConnection();
+
+            String statement = sqlprop.getProperty("DistinctAuthor");
+            
+            stmt = con.createStatement();
+
+            ResultSet rs = stmt.executeQuery(statement); 
+            
+            while (rs.next()) {
+
+                results.add(rs.getString("Owner"));
+            }    
+            
+            if (stmt != null) {
+                
+                stmt.close();
+            }
+
+		}catch(Exception e){System.out.println(e);}
+		
+		return results;
+    }
+
+    public ArrayList <String> DistinctsDates(){
+        
+        Statement stmt = null;
+        ArrayList <String> results = new ArrayList<String>();
+        String resul = new String();
+        
+		try{
+            
+			Connection con=getConnection();
+
+            String statement = sqlprop.getProperty("DistinctDate");
+            
+            stmt = con.createStatement();
+
+            ResultSet rs = stmt.executeQuery(statement); 
+
+            while (rs.next()) {
+
+            	if(rs.getTimestamp("Publication") != null) {
+            		
+            		resul = rs.getTimestamp("Publication").toString().replaceAll(" ", "");
+                	results.add(resul);
+            	}
+            	
+            }
+            
+            if (stmt != null) {
+                
+                stmt.close();
+            }
+
+		}catch(Exception e){System.out.println(e);}
+		
+		return results;
     }
 }
 

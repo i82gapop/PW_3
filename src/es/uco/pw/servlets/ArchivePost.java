@@ -67,12 +67,15 @@ public class ArchivePost extends HttpServlet {
                         aux_post.setStatus(Status.ARCHIVED);
 
                         daopost.UpdateStatus(aux_post);
+                        
+                    	request.setAttribute("success", "Post archived succesfully");
+                    	RequestDispatcher disp = request.getRequestDispatcher(nextPage);
+                    	disp.include(request, response); 
+
                     }
 
                     else{
-                    	response.setContentType("text/html");
-                    	PrintWriter out = response.getWriter();
-                    	out.println("You are not the owner of this post");
+                    	request.setAttribute("error", "You are not the owner of that post");
                     	RequestDispatcher disp = request.getRequestDispatcher(nextPage);
                     	disp.include(request, response); 
 
@@ -80,9 +83,7 @@ public class ArchivePost extends HttpServlet {
                 }
 
                 else {
-                	response.setContentType("text/html");
-                	PrintWriter out = response.getWriter();
-                	out.println("That ID doesn't exist");
+                	request.setAttribute("error", "That ID doesn't exist");
                 	RequestDispatcher disp = request.getRequestDispatcher(nextPage);
                 	disp.include(request, response); 
                 }
